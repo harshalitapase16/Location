@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid flex-grow-3 container-p-y">
+  <!-- Basic Layout -->
+  <div class="row">
+    <div class="col-xl">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0 py-3">Update/<span class="text-muted fw-light">Country</span></h5>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+          {{message}}
+
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <div class="card-body">
+          <form action="{% url 'updateform' c_obj.slug %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label class="form-label" for="basic-default-fullname">Country Name</label>
+                <input type="text" class="form-control" id="basic-default-fullname" placeholder="Country Name"
+                  name="c_name" value="{{c_obj.name}}" />
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label" for="basic-default-company">Slug</label>
+                <input type="text" class="form-control" id="basic-default-company" value="{{c_obj.slug}}"
+                  placeholder="Slug" name="slug" />
+              </div>
+              <div class="mb-3 col-md-4">
+                <label class="form-label" for="basic-default-email">Code</label>
+                <input type="text" id="basic-default-email" class="form-control" placeholder="Code"
+                  aria-describedby="basic-default-email2" name="code" value="{{c_obj.code}}" />
+              </div>
+              <div class="mb-3 mt-5 col-md-2">
+                {% if c_obj.is_state_available %}
+                <input class="form-check-input" type="checkbox" value="1" id="defaultCheck1" name="state_available" checked>
+                {% else %}
+                <input class="form-check-input" type="checkbox" value="1" id="defaultCheck1" name="state_available">
+                {% endif %}
+                <label class="form-check-label" for="defaultCheck1"> State Available </label>
+              </div>
+              <div class="mb-3 col-md-3">
+                <label for="formFile" class="form-label">Country Flag</label>
+                <input class="form-control" type="file" id="formFile" name="flag" value="{{c_obj.flag.url}}">
+              </div>
+              <img src="{{c_obj.flag.url}}" alt="flag-image" style="width: 120px;">
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- / Content -->
+</div>
+
+{% endblock content %}
